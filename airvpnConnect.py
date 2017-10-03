@@ -3,8 +3,8 @@
 #By: Manuel A. Chavez M.
 
 #Imports
-import sys, getopt, shutil, socket, fileinput
-from subprocess import call
+import os, sys, getopt, shutil, socket, fileinput
+from subprocess import call, Popen
 from colorama import Fore, init
 
 #Autoreset colorama color
@@ -56,12 +56,12 @@ def createTempFile(file):
 #Procedure to modify resolv.conf
 def editResolv(file):
   print(Fore.RED + "Editing /etc/resolv.conf file...")
-  shutil.move("/etc/resolv.conf", "/etc/resolv.conf.bak")
+  shutil.copy("/etc/resolv.conf", "/etc/resolv.conf.bak")
   f = open("/etc/resolv.conf", "r+")
   f.write("nameserver " + findDNS(file) + '\n' )
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "/etc/resolv.conf content:")
-  print(f.read) 
+  print(f.read()) 
   f.close() 
 
 #Procedure to restore resolv.conf and delete temporary .ovpn file
@@ -73,6 +73,13 @@ def clean():
   call(["rm", "/tmp/airvpntmp.ovpn"])
   print(Fore.GREEN + "Done!")
   
+#Procedure to perform de connection
+def connect(tempfile):
+  print(Fore.RED + "Connecting using file: {}".format(tempfile))
+  p = Popen(["openvpn", tempfile], shell=False)
+  pid = p.pid
+  os.kill(pid, signal.SIGINT)
+
 def main():
   TEMP_FILE = "/tmp/airvpntmp.ovpn"
   OVPN_FILE = ""
@@ -89,8 +96,8 @@ def main():
       OVPN_FILE = arg
   createTempFile(OVPN_FILE)
   editResolv(OVPN_FILE)
-  print(Fore.RED + "Connecting using file: {}".format(TEMP_FILE)) 
-  call(["openvpn", TEMP_FILE])
+  connect(TEMP_FILE)
+  clean()
 
 if __name__ == "__main__":
   main()
