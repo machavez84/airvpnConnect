@@ -57,7 +57,7 @@ def createTempFile(file):
 def editResolv(file):
   print(Fore.RED + "Editing /etc/resolv.conf file...")
   shutil.move("/etc/resolv.conf", "/etc/resolv.conf.bak")
-  f = open("/etc/resolv.conf", "w")
+  f = open("/etc/resolv.conf", "r+")
   f.write("nameserver " + findDNS(file) + '\n' )
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "/etc/resolv.conf content:")
