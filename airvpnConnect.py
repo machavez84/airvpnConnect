@@ -5,10 +5,15 @@
 #Imports
 import sys, getopt, shutil, socket, fileinput
 from subprocess import call, Popen
-from colorama import Fore, init
+from colorama import Fore, Back, init
 
 #Autoreset colorama color
 init(autoreset=True)
+
+def header():
+  print(Fore.GREEN + "*********************************")
+  print(Back.RED + "*AIRVPN Python connection script*")
+  print(Fore.GREEN + "*********************************")
 
 #To tell how to use the script
 def usage():
@@ -77,6 +82,7 @@ def clean():
 #Procedure to perform de connection
 def connect(tempfile):
   print(Fore.RED + "Connecting using file: {}".format(tempfile))
+  print(Back.GREEN + "Keep this terminal open. PRESS CTR-C TO DISCONNECT" )
   try:
     Popen(["openvpn " + tempfile], shell=True).communicate()
   except KeyboardInterrupt:
@@ -97,6 +103,7 @@ def main():
   for opt, arg in opts:
     if opt in ("-f", "--file"):
       OVPN_FILE = arg
+  header()
   createTempFile(OVPN_FILE)
   editResolv(OVPN_FILE)
   connect(TEMP_FILE)
