@@ -51,13 +51,22 @@ def getIP(d):
   except Exception:
     return False
 
+def getRemoteHost(file):
+  domain = ""
+  if "AltEntry" in file:
+    domain = "earth2.vpn.airdns.org"
+  else:
+    domain = "earth.vpn.airdns.org"
+  return domain
+
 #Procedure to create temporary .ovpn file as openvpn config file
 def createTempFile(file):
+  print(Fore.RED + "remote hostname is: {}".format(getRemoteHost(file)))
   print(Fore.RED + "Creating .ovpn temporay file...", end="")
   shutil.copy(file, "/tmp/airvpntmp.ovpn")
   for line in fileinput.input("/tmp/airvpntmp.ovpn", inplace=1):
     if "remote" in line:
-      line = line.replace("earth.vpn.airdns.org", str(getIP("earth.vpn.airdns.org")))
+      line = line.replace(getRemoteHost(file), getIP(getRemoteHost(file)))
     sys.stdout.write(line)
   print(Fore.GREEN + "Done!") 
 
@@ -78,9 +87,9 @@ def clean():
   print(Fore.RED + "Restoring /etc/resolv.conf file...", end="")
   shutil.move("/etc/resolv.conf.bak", "/etc/resolv.conf")
   print(Fore.GREEN + "Done!")
-  print(Fore.RED + "Deleting temporary .ovpn file...", end"")
+  print(Fore.RED + "Deleting temporary .ovpn file...", end="")
   call(["rm", "/tmp/airvpntmp.ovpn"])
-  print(Fore.GREEN + "Done!", end="")
+  print(Fore.GREEN + "Done!")
   
 #Procedure to perform de connection
 def connect(tempfile):
