@@ -12,8 +12,11 @@ init(autoreset=True)
 
 def header():
   print(Fore.GREEN + "*********************************")
-  print(Back.RED + "*AIRVPN Python connection script*")
+  print(Fore.GREEN + "*", end="")
+  print(Fore.RED + "AIRVPN Python connection script", end="")
+  print(Fore.GREEN + "*")
   print(Fore.GREEN + "*********************************")
+
 
 #To tell how to use the script
 def usage():
@@ -50,7 +53,7 @@ def getIP(d):
 
 #Procedure to create temporary .ovpn file as openvpn config file
 def createTempFile(file):
-  print(Fore.RED + "Creating .ovpn temporay file...")
+  print(Fore.RED + "Creating .ovpn temporay file...", end="")
   shutil.copy(file, "/tmp/airvpntmp.ovpn")
   for line in fileinput.input("/tmp/airvpntmp.ovpn", inplace=1):
     if "remote" in line:
@@ -60,7 +63,7 @@ def createTempFile(file):
 
 #Procedure to modify resolv.conf
 def editResolv(file):
-  print(Fore.RED + "Editing /etc/resolv.conf file...")
+  print(Fore.RED + "Editing /etc/resolv.conf file...", end="")
   shutil.move("/etc/resolv.conf", "/etc/resolv.conf.bak")
   f = open("/etc/resolv.conf", "w+")
   f.write("nameserver " + findDNS(file) + '\n' )
@@ -72,17 +75,17 @@ def editResolv(file):
 
 #Procedure to restore resolv.conf and delete temporary .ovpn file
 def clean():
-  print(Fore.RED + "Restoring /etc/resolv.conf file...")
+  print(Fore.RED + "Restoring /etc/resolv.conf file...", end="")
   shutil.move("/etc/resolv.conf.bak", "/etc/resolv.conf")
   print(Fore.GREEN + "Done!")
-  print(Fore.RED + "Deleting temporary .ovpn file...")
+  print(Fore.RED + "Deleting temporary .ovpn file...", end"")
   call(["rm", "/tmp/airvpntmp.ovpn"])
-  print(Fore.GREEN + "Done!")
+  print(Fore.GREEN + "Done!", end="")
   
 #Procedure to perform de connection
 def connect(tempfile):
   print(Fore.RED + "Connecting using file: {}".format(tempfile))
-  print(Back.GREEN + "Keep this terminal open. PRESS CTR-C TO DISCONNECT" )
+  print(Back.RED + "Keep this terminal open. PRESS CTR-C TO DISCONNECT" )
   try:
     Popen(["openvpn " + tempfile], shell=True).communicate()
   except KeyboardInterrupt:
