@@ -61,7 +61,7 @@ def getRemoteHost(file):
 
 #Procedure to create temporary .ovpn file as openvpn config file
 def createTempFile(file):
-  print(Fore.RED + "remote hostname is: {}".format(getRemoteHost(file)))
+  print(Fore.RED + "Remote hostname is: {}".format(getRemoteHost(file)))
   print(Fore.RED + "Creating .ovpn temporay file...", end="")
   shutil.copy(file, "/tmp/airvpntmp.ovpn")
   for line in fileinput.input("/tmp/airvpntmp.ovpn", inplace=1):
