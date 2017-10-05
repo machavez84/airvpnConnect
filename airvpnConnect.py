@@ -52,21 +52,21 @@ def getIP(d):
     return False
 
 def getRemoteHost(file):
-  domain = ""
+  remote = ""
   if "AltEntry" in file:
-    domain = "earth2.vpn.airdns.org"
+    remote = "earth2.vpn.airdns.org"
   else:
-    domain = "earth.vpn.airdns.org"
-  return domain
+    remote = "earth.vpn.airdns.org"
+  return remote
 
 #Procedure to create temporary .ovpn file as openvpn config file
 def createTempFile(file):
   print(Fore.RED + "Remote hostname is: {}".format(getRemoteHost(file)))
-  print(Fore.RED + "Creating .ovpn temporay file...", end="")
+  print(Fore.RED + "Creating .ovpn temporary file...", end="")
   shutil.copy(file, "/tmp/airvpntmp.ovpn")
   for line in fileinput.input("/tmp/airvpntmp.ovpn", inplace=1):
     if "remote" in line:
-      line = line.replace(getRemoteHost(file), getIP(getRemoteHost(file)))
+      line = line.replace(getRemoteHost(file), str(getIP(getRemoteHost(file))))
     sys.stdout.write(line)
   print(Fore.GREEN + "Done!") 
 
@@ -79,12 +79,14 @@ def editResolv(file):
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "/etc/resolv.conf content:")
   f.close()
+  call(["chattr", "+i", "/etc/resolv.conf"])
   call(["cat", "/etc/resolv.conf"]) 
   
 
 #Procedure to restore resolv.conf and delete temporary .ovpn file
 def clean():
   print(Fore.RED + "Restoring /etc/resolv.conf file...", end="")
+  call(["chattr", "-i", "/etc/resolv.conf"])
   shutil.move("/etc/resolv.conf.bak", "/etc/resolv.conf")
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "Deleting temporary .ovpn file...", end="")
