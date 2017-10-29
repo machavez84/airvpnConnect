@@ -20,7 +20,7 @@ def header():
 
 #To tell how to use the script
 def usage():
-  return print("Usage: openvpnConnect.py -f/--file <.ovpn file>")
+  return print("Usage: airvpnConnect.py -f/--file <.ovpn file>")
 
 #Function to determine DNS IP
 def findDNS(file):
