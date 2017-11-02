@@ -2,7 +2,7 @@
 
 USAGE:
 
-openvpnConnect.py -f/--file <.ovpn file>
+airvpnConnect.py -f/--file <.ovpn file>
 
 RESTRICTIONS:
 
