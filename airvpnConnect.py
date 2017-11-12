@@ -51,6 +51,7 @@ def getIP(d):
   except Exception:
     return False
 
+#Function to find out the remote host to connect to
 def getRemoteHost(file):
   remote = ""
   if "AltEntry" in file:
@@ -79,14 +80,12 @@ def editResolv(file):
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "/etc/resolv.conf content:")
   f.close()
-  call(["chattr", "+i", "/etc/resolv.conf"])
   call(["cat", "/etc/resolv.conf"]) 
   
 
 #Procedure to restore resolv.conf and delete temporary .ovpn file
 def clean():
   print(Fore.RED + "Restoring /etc/resolv.conf file...", end="")
-  call(["chattr", "-i", "/etc/resolv.conf"])
   shutil.move("/etc/resolv.conf.bak", "/etc/resolv.conf")
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "Deleting temporary .ovpn file...", end="")
