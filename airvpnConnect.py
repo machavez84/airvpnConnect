@@ -3,7 +3,7 @@
 #By: Manuel A. Chavez M.
 
 #Imports
-import sys, getopt, shutil, socket, fileinput
+import sys, getopt, shutil, socket, fileinput, time
 from subprocess import call, Popen
 from colorama import Fore, Back, init
 
@@ -91,7 +91,10 @@ def clean():
   print(Fore.RED + "Deleting temporary .ovpn file...", end="")
   call(["rm", "/tmp/airvpntmp.ovpn"])
   print(Fore.GREEN + "Done!")
-  
+  print(Fore.RED + "Waiting for openvpn clean..." )
+  time.sleep(5)
+  print(Fore.GREEN + "Done!")  
+
 #Procedure to perform de connection
 def connect(tempfile):
   print(Fore.RED + "Connecting using file: {}".format(tempfile))
