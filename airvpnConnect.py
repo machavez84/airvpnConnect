@@ -54,10 +54,18 @@ def getIP(d):
 #Function to find out the remote host to connect to
 def getRemoteHost(file):
   remote = ""
-  if "AltEntry" in file:
+  if "AltEntry" in file and "All" in file:
     remote = "earth2.vpn.airdns.org"
-  else:
+  elif "All" in file:
     remote = "earth.vpn.airdns.org"
+  elif "AltEntry" in file and "America" in file:
+    remote = "america2.vpn.airdns.org"
+  elif "America" in file: 
+    remote = "america.vpn.airdns.org"
+  elif "AltEntry" in file and "Europe" in file:
+    remote = "europe2.vpn.airdns.org"
+  elif "Europe" in file: 
+    remote = "europe.vpn.airdns.org"
   return remote
 
 #Procedure to create temporary .ovpn file as openvpn config file
@@ -92,7 +100,7 @@ def clean():
   call(["rm", "/tmp/airvpntmp.ovpn"])
   print(Fore.GREEN + "Done!")
   print(Fore.RED + "Waiting for openvpn clean..." )
-  time.sleep(5)
+  time.sleep(7)
   print(Fore.GREEN + "Done!")  
 
 #Procedure to perform de connection
